@@ -1,5 +1,9 @@
 package com.tonmoy1912.api;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -9,6 +13,34 @@ import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
 
 public class GameEngine {
+
+    Map<String,List<Rule<Board>>> map= new HashMap<>();
+
+    public GameEngine(){
+        String key=TicTakToeBoard.class.getName();
+        map.put(key, new ArrayList<Rule<Board>>());
+        map.get(key).add(new Rule<Board>(board->outerTraversal((i, j) -> ((TicTakToeBoard)board).getSymbol(i, j))));
+        map.get(key).add(new Rule<Board>(board->outerTraversal((i, j) -> ((TicTakToeBoard)board).getSymbol(j, i))));
+        map.get(key).add(new Rule<Board>(board->traverse(i -> ((TicTakToeBoard)board).getSymbol(i, i))));
+        map.get(key).add(new Rule<Board>(board->traverse(i -> ((TicTakToeBoard)board).getSymbol(i, 2 - i))));
+        map.get(key).add(new Rule<Board>(board->{
+            TicTakToeBoard board1=(TicTakToeBoard)board;
+            int countOfFilledCells = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board1.getSymbol(i, j) != null) {
+                        countOfFilledCells++;
+                    }
+                }
+            }
+
+            if (countOfFilledCells == 9) {
+                return new GameState(true, "-");
+            } else {
+                return new GameState(false, "-");
+            }
+        }));
+    }
 
     public Board start(String type) {
         if (type.equals("TicTacToe")) {
@@ -30,38 +62,13 @@ public class GameEngine {
         if (board instanceof TicTakToeBoard) {
             TicTakToeBoard board1 = (TicTakToeBoard) board;
 
-            GameState rowWin = outerTraversal((i, j) -> board1.getSymbol(i, j));
-            if (rowWin.isOver()) {
-                return rowWin;
-            }
-            GameState colWin = outerTraversal((i, j) -> board1.getSymbol(j, i));
-            if (colWin.isOver()) {
-                return colWin;
-            }
-
-            GameState diagWin = traverse(i -> board1.getSymbol(i, i));
-            if (diagWin.isOver()) {
-                return diagWin;
-            }
-            GameState revDiagWin = traverse(i -> board1.getSymbol(i, 2 - i));
-            if (revDiagWin.isOver()) {
-                return revDiagWin;
-            }
-
-            int countOfFilledCells = 0;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (board1.getSymbol(i, j) != null) {
-                        countOfFilledCells++;
-                    }
+            for(Rule<Board> rule: map.get(TicTakToeBoard.class.getName())){
+                GameState gameState=rule.condition.apply(board1);
+                if(gameState.isOver()){
+                    return gameState;
                 }
             }
-
-            if (countOfFilledCells == 9) {
-                return new GameState(true, "-");
-            } else {
-                return new GameState(false, "-");
-            }
+            return new GameState(false, "-");
 
         } else {
             throw new IllegalArgumentException();
@@ -97,4 +104,12 @@ public class GameEngine {
         return result;
     }
 
+}
+
+class  Rule<T extends Board> {
+    Function<T,GameState> condition;
+
+    public Rule(Function<T,GameState> condition){
+        this.condition=condition;
+    }
 }
