@@ -37,7 +37,7 @@ public class Main {
             }
 
             System.out.println(board);
-            System.out.println("GameResult: " + gameEngine.isComplete(board));
+            System.out.println("GameResult: " + ruleEngine.getState(board));
         }
     }
 }
