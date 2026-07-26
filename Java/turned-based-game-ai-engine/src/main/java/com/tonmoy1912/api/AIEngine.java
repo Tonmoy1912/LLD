@@ -1,6 +1,6 @@
 package com.tonmoy1912.api;
 
-import com.tonmoy1912.boards.TicTakToeBoard;
+import com.tonmoy1912.boards.TicTacToeBoard;
 import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.Move;
@@ -8,8 +8,8 @@ import com.tonmoy1912.game.Player;
 
 public class AIEngine {
     public Move suggestMove(Player player, Board board) {
-        if (board instanceof TicTakToeBoard) {
-            TicTakToeBoard board1 = (TicTakToeBoard) board;
+        if (board instanceof TicTacToeBoard) {
+            TicTacToeBoard board1 = (TicTacToeBoard) board;
             Move suggestion;
             int threshold = 3;
             if (countMoves(board1) < threshold) {
@@ -25,7 +25,7 @@ public class AIEngine {
         }
     }
 
-    private int countMoves(TicTakToeBoard board) {
+    private int countMoves(TicTacToeBoard board) {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -37,7 +37,7 @@ public class AIEngine {
         return count;
     }
 
-    private Move getSmartMove(Player player, TicTakToeBoard board) {
+    private Move getSmartMove(Player player, TicTacToeBoard board) {
         RuleEngine ruleEngine=new RuleEngine();
 
         // Victorious move
@@ -45,7 +45,7 @@ public class AIEngine {
             for (int j = 0; j < 3; j++) {
                 if (board.getSymbol(i, j) == null) {
                     Move move= new Move(new Cell(i, j), player);
-                    TicTakToeBoard boardCopy= board.copy();
+                    TicTacToeBoard boardCopy= board.copy();
                     boardCopy.move(move);
                     if(ruleEngine.getState(boardCopy).isOver()){
                         return move;
@@ -59,7 +59,7 @@ public class AIEngine {
             for (int j = 0; j < 3; j++) {
                 if (board.getSymbol(i, j) == null) {
                     Move move= new Move(new Cell(i, j), player.flip());
-                    TicTakToeBoard boardCopy= board.copy();
+                    TicTacToeBoard boardCopy= board.copy();
                     boardCopy.move(move);
                     if(ruleEngine.getState(boardCopy).isOver()){
                         return new Move(new Cell(i, j), player);
@@ -71,7 +71,7 @@ public class AIEngine {
         return getBasicMove(player, board);
     }
 
-    private Move getBasicMove(Player player, TicTakToeBoard board) {
+    private Move getBasicMove(Player player, TicTacToeBoard board) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board.getSymbol(i, j) == null) {

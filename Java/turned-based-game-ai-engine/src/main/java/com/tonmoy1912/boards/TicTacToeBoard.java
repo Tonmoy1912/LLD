@@ -4,7 +4,7 @@ import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.Move;
 
-public class TicTakToeBoard implements Board {
+public class TicTacToeBoard implements Board {
     private String cells[][] = new String[3][3];
 
     public String getSymbol(int row, int col) {
@@ -37,8 +37,8 @@ public class TicTakToeBoard implements Board {
 
     // Prototype Design Pattern
     @Override
-    public TicTakToeBoard copy() {
-        TicTakToeBoard boardCopy= new TicTakToeBoard();
+    public TicTacToeBoard copy() {
+        TicTacToeBoard boardCopy= new TicTacToeBoard();
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
                 boardCopy.cells[i][j]=cells[i][j];
