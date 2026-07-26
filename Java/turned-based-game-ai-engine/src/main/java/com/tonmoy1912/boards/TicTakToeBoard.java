@@ -4,15 +4,18 @@ import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.Move;
 
-public class TicTakToeBoard extends Board {
+public class TicTakToeBoard implements Board {
     private String cells[][] = new String[3][3];
 
-    public String getCell(int row, int col) {
+    public String getSymbol(int row, int col) {
         return cells[row][col];
     }
 
     public void setCell(Cell cell, String symbol) {
-        cells[cell.getRow()][cell.getCol()] = symbol;
+        if (cells[cell.getRow()][cell.getCol()] == null)
+            cells[cell.getRow()][cell.getCol()] = symbol;
+        else
+            throw new IllegalArgumentException();
     }
 
     @Override
@@ -30,5 +33,17 @@ public class TicTakToeBoard extends Board {
     @Override
     public void move(Move move) {
         setCell(move.getCell(), move.getPlayer().symbol());
+    }
+
+    // Prototype Design Pattern
+    @Override
+    public TicTakToeBoard copy() {
+        TicTakToeBoard boardCopy= new TicTakToeBoard();
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                boardCopy.cells[i][j]=cells[i][j];
+            }
+        }
+        return boardCopy;
     }
 }

@@ -13,4 +13,8 @@ public class Player {
     public String symbol(){
         return playerSymbol;
     }
+
+    public Player flip() {
+        return new Player(playerSymbol=="0"?"X":"0");
+    }
 }

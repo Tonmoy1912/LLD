@@ -33,9 +33,10 @@ public class GamePlayTest {
     public void checkForRowWin() {
 
         Board board = gameEngine.start("TicTacToe");
-        int[][] moves = new int[][] { { 1, 0 }, { 1, 1 }, { 1, 2 } };
+        int[][] firstPlayMoves = new int[][] { { 1, 0 }, { 1, 1 }, { 1, 2 } };
+        int[][] secondPlayerMove = new int[][] { { 0, 0 }, { 0, 1 }, { 0, 2 } };
 
-        playGame(board, moves);
+        playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
@@ -45,9 +46,10 @@ public class GamePlayTest {
     public void checkForColWin() {
 
         Board board = gameEngine.start("TicTacToe");
-        int[][] moves = new int[][] { { 0, 1 }, { 1, 1 }, { 2, 1 } };
+        int[][] firstPlayMoves = new int[][] { { 0, 1 }, { 1, 1 }, { 2, 1 } };
+        int[][] secondPlayerMove = new int[][] { { 0, 0 }, { 1, 0 }, { 2, 2 } };
 
-        playGame(board, moves);
+        playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
@@ -57,9 +59,10 @@ public class GamePlayTest {
     public void checkForDiagWin() {
 
         Board board = gameEngine.start("TicTacToe");
-        int[][] moves = new int[][] { { 0, 0 }, { 1, 1 }, { 2, 2 } };
+        int[][] firstPlayMoves = new int[][] { { 0, 0 }, { 1, 1 }, { 2, 2 } };
+        int[][] secondPlayerMove = new int[][] { { 0, 1 }, { 1, 0 }, { 2, 1 } };
 
-        playGame(board, moves);
+        playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
@@ -68,9 +71,10 @@ public class GamePlayTest {
     @Test
     public void checkForRevDiagWin() {
         Board board = gameEngine.start("TicTacToe");
-        int[][] moves = new int[][] { { 0, 2 }, { 1, 1 }, { 2, 0 } };
+        int[][] firstPlayMoves = new int[][] { { 0, 2 }, { 1, 1 }, { 2, 0 } };
+        int[][] secondPlayerMove = new int[][] { { 0, 0 }, { 1, 0 }, { 2, 1 } };
 
-        playGame(board, moves);
+        playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("X", ruleEngine.getState(board).getWinner());
@@ -80,29 +84,30 @@ public class GamePlayTest {
     public void checkForComputerWin() {
 
         Board board = gameEngine.start("TicTacToe");
-        int[][] moves = new int[][] { { 1, 0 }, { 1, 1 }, { 2, 1 } };
+        int[][] firstPlayMoves = new int[][] { { 0, 0 }, { 0, 1 }, { 2, 0 } };
+        int[][] secondPlayerMove = new int[][] { { 1, 0 }, { 1, 1 }, { 1, 2 } };
 
-        playGame(board, moves);
+        playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
         assertEquals("0", ruleEngine.getState(board).getWinner());
     }
 
-    private void playGame(Board board, int[][] moves) {
+    private void playGame(Board board, int[][] firstPlayMoves, int[][] secondPlayerMove) {
         int next = 0;
 
         while (!ruleEngine.getState(board).isOver()) {
             Player computer = new Player("0");
             Player opponent = new Player("X");
 
-            int row = moves[next][0];
-            int col = moves[next][1];
+            int row = firstPlayMoves[next][0];
+            int col = firstPlayMoves[next][1];
 
             Move oppMove = new Move(new Cell(row, col), opponent);
             gameEngine.move(board, oppMove);
 
             if (!ruleEngine.getState(board).isOver()) {
-                Move computerMove = aiEngine.suggestMove(computer, board);
+                Move computerMove = new Move(new Cell(secondPlayerMove[next][0], secondPlayerMove[next][1]), computer);
                 gameEngine.move(board, computerMove);
             }
             next++;
