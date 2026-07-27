@@ -3,23 +3,23 @@ package com.tonmoy1912.boards;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
+import com.tonmoy1912.game.CellBoard;
 import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Rule;
 import com.tonmoy1912.game.RuleSet;
 
-public class TicTacToeBoard implements Board {
+public class TicTacToeBoard implements CellBoard {
     private String cells[][] = new String[3][3];
 
-    public static RuleSet<TicTacToeBoard> getRules() {
-        RuleSet<TicTacToeBoard> ruleSet = new RuleSet<>();
-        ruleSet.add(new Rule<TicTacToeBoard>(board -> outerTraversal((i, j) -> board.getSymbol(i, j))));
-        ruleSet.add(new Rule<TicTacToeBoard>(board -> outerTraversal((i, j) -> board.getSymbol(j, i))));
-        ruleSet.add(new Rule<TicTacToeBoard>(board -> traverse(i -> board.getSymbol(i, i))));
-        ruleSet.add(new Rule<TicTacToeBoard>(board -> traverse(i -> board.getSymbol(i, 2 - i))));
-        ruleSet.add(new Rule<TicTacToeBoard>(board -> {
+    public static RuleSet getRules() {
+        RuleSet ruleSet = new RuleSet();
+        ruleSet.add(new Rule(board -> outerTraversal((i, j) -> board.getSymbol(i, j))));
+        ruleSet.add(new Rule(board -> outerTraversal((i, j) -> board.getSymbol(j, i))));
+        ruleSet.add(new Rule(board -> traverse(i -> board.getSymbol(i, i))));
+        ruleSet.add(new Rule(board -> traverse(i -> board.getSymbol(i, 2 - i))));
+        ruleSet.add(new Rule(board -> {
             int countOfFilledCells = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
@@ -38,6 +38,7 @@ public class TicTacToeBoard implements Board {
         return ruleSet;
     }
 
+    @Override
     public String getSymbol(int row, int col) {
         return cells[row][col];
     }

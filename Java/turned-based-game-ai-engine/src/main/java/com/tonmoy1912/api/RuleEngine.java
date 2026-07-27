@@ -16,7 +16,7 @@ import com.tonmoy1912.game.RuleSet;
 
 public class RuleEngine {
 
-    Map<String, RuleSet<TicTacToeBoard>> map = new HashMap<>();
+    Map<String, RuleSet> map = new HashMap<>();
 
     public RuleEngine() {
         String key = TicTacToeBoard.class.getName();
@@ -27,7 +27,7 @@ public class RuleEngine {
         if (board instanceof TicTacToeBoard) {
             TicTacToeBoard board1 = (TicTacToeBoard) board;
 
-            for (Rule<TicTacToeBoard> rule : map.get(TicTacToeBoard.class.getName())) {
+            for (Rule rule : map.get(TicTacToeBoard.class.getName())) {
                 GameState gameState = rule.getCondition().apply(board1);
                 if (gameState.isOver()) {
                     return gameState;
