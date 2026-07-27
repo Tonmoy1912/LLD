@@ -1,11 +1,14 @@
 package com.tonmoy1912.api;
 
+import java.util.Optional;
+
 import com.tonmoy1912.boards.TicTacToeBoard;
 import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
-import com.tonmoy1912.game.GameInfo;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Player;
+import com.tonmoy1912.placements.OffensivePlacement;
+import com.tonmoy1912.placements.Placement;
 
 public class AIEngine {
     private RuleEngine ruleEngine = new RuleEngine();
@@ -42,34 +45,21 @@ public class AIEngine {
         return count;
     }
 
+    // Chain of Responsibility Design Pattern
     private Cell getOptimalMove(Player player, TicTacToeBoard board) {
         // 1. if you have a winning move, then play it.
-        Cell best = offensive(player, board);
-        if (best != null) {
-            return best;
-        }
         // 2. if opp has a wining move, then block it.
-        best = defensive(player, board);
-        if (best != null) {
-            return best;
-        }
         // 3. if you have a fork, then play it
         // 4. if opp has a fork, then block it
-        GameInfo gameInfo = ruleEngine.getInfo(board);
-        if (gameInfo.hasFork()) {
-            best = gameInfo.getForkCell();
-            return best;
-        }
         // 5. if the center is available, take it
-        if (board.getSymbol(1, 1) == null) {
-            return new Cell(1, 1);
-        }
         // 6. if the corner is available, take it
-        final int[][] corners = { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
-        for (int i = 0; i < 4; i++) {
-            if (board.getSymbol(corners[i][0], corners[i][1]) == null) {
-                return new Cell(corners[i][0], corners[i][1]);
+        Placement placement = OffensivePlacement.get();
+        while (placement != null) {
+            Optional<Cell> place = placement.place(board, player);
+            if (place.isPresent()) {
+                return place.get();
             }
+            placement = placement.next();
         }
         return null;
     }

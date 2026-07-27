@@ -2,8 +2,10 @@ package com.tonmoy1912.placements;
 
 import java.util.Optional;
 
-import com.tonmoy1912.game.Board;
+import com.tonmoy1912.boards.TicTacToeBoard;
 import com.tonmoy1912.game.Cell;
+import com.tonmoy1912.game.GameInfo;
+import com.tonmoy1912.game.Player;
 import com.tonmoy1912.utils.Utils;
 
 public class ForkPlacement implements Placement {
@@ -21,15 +23,18 @@ public class ForkPlacement implements Placement {
     }
 
     @Override
-    public Optional<Cell> place(Board board) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'place'");
+    public Optional<Cell> place(TicTacToeBoard board, Player player) {
+        Cell best = null;
+        GameInfo gameInfo = ruleEngine.getInfo(board);
+        if (gameInfo.hasFork()) {
+            best = gameInfo.getForkCell();
+        }
+        return Optional.ofNullable(best);
     }
 
     @Override
     public Placement next() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'next'");
+        return CenterPlacement.get();
     }
 
 }
