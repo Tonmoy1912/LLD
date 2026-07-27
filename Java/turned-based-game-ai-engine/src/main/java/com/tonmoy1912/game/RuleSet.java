@@ -1,11 +1,11 @@
 package com.tonmoy1912.game;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class RuleSet<T extends Board> implements Iterable<Rule<T>> {
-    private List<Rule<T>> ruleList=new ArrayList<>();
+    private Set<Rule<T>> ruleList=new HashSet<>();
 
     public void add(Rule<T> rule){
         ruleList.add(rule);
