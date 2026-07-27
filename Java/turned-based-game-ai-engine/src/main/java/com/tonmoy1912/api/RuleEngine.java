@@ -1,8 +1,6 @@
 package com.tonmoy1912.api;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -15,24 +13,25 @@ import com.tonmoy1912.game.GameInfoBuilder;
 import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Player;
+import com.tonmoy1912.game.Rule;
+import com.tonmoy1912.game.RuleSet;
 
 public class RuleEngine {
 
-    Map<String, List<Rule<Board>>> map = new HashMap<>();
+    Map<String, RuleSet<TicTacToeBoard>> map = new HashMap<>();
 
     public RuleEngine() {
         String key = TicTacToeBoard.class.getName();
-        map.put(key, new ArrayList<Rule<Board>>());
-        map.get(key).add(new Rule<Board>(board -> outerTraversal((i, j) -> ((TicTacToeBoard) board).getSymbol(i, j))));
-        map.get(key).add(new Rule<Board>(board -> outerTraversal((i, j) -> ((TicTacToeBoard) board).getSymbol(j, i))));
-        map.get(key).add(new Rule<Board>(board -> traverse(i -> ((TicTacToeBoard) board).getSymbol(i, i))));
-        map.get(key).add(new Rule<Board>(board -> traverse(i -> ((TicTacToeBoard) board).getSymbol(i, 2 - i))));
-        map.get(key).add(new Rule<Board>(board -> {
-            TicTacToeBoard board1 = (TicTacToeBoard) board;
+        map.put(key, new RuleSet<>());
+        map.get(key).add(new Rule<TicTacToeBoard>(board -> outerTraversal((i, j) -> board.getSymbol(i, j))));
+        map.get(key).add(new Rule<TicTacToeBoard>(board -> outerTraversal((i, j) -> board.getSymbol(j, i))));
+        map.get(key).add(new Rule<TicTacToeBoard>(board -> traverse(i -> board.getSymbol(i, i))));
+        map.get(key).add(new Rule<TicTacToeBoard>(board -> traverse(i -> board.getSymbol(i, 2 - i))));
+        map.get(key).add(new Rule<TicTacToeBoard>(board -> {
             int countOfFilledCells = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (board1.getSymbol(i, j) != null) {
+                    if (board.getSymbol(i, j) != null) {
                         countOfFilledCells++;
                     }
                 }
@@ -50,8 +49,8 @@ public class RuleEngine {
         if (board instanceof TicTacToeBoard) {
             TicTacToeBoard board1 = (TicTacToeBoard) board;
 
-            for (Rule<Board> rule : map.get(TicTacToeBoard.class.getName())) {
-                GameState gameState = rule.condition.apply(board1);
+            for (Rule<TicTacToeBoard> rule : map.get(TicTacToeBoard.class.getName())) {
+                GameState gameState = rule.getCondition().apply(board1);
                 if (gameState.isOver()) {
                     return gameState;
                 }
@@ -146,12 +145,4 @@ public class RuleEngine {
         return result;
     }
 
-}
-
-class Rule<T extends Board> {
-    Function<T, GameState> condition;
-
-    public Rule(Function<T, GameState> condition) {
-        this.condition = condition;
-    }
 }
