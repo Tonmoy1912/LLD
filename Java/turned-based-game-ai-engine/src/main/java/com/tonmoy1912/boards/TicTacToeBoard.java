@@ -3,12 +3,11 @@ package com.tonmoy1912.boards;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.tonmoy1912.api.Rule;
+import com.tonmoy1912.api.RuleSet;
 import com.tonmoy1912.game.Cell;
-import com.tonmoy1912.game.CellBoard;
 import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
-import com.tonmoy1912.game.Rule;
-import com.tonmoy1912.game.RuleSet;
 
 public class TicTacToeBoard implements CellBoard {
     private String cells[][] = new String[3][3];

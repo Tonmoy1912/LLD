@@ -1,4 +1,6 @@
-package com.tonmoy1912.game;
+package com.tonmoy1912.boards;
+
+import com.tonmoy1912.game.Move;
 
 /**
  * Board

@@ -3,16 +3,14 @@ package com.tonmoy1912.api;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tonmoy1912.boards.Board;
 import com.tonmoy1912.boards.TicTacToeBoard;
-import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.GameInfo;
 import com.tonmoy1912.game.GameInfoBuilder;
 import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Player;
-import com.tonmoy1912.game.Rule;
-import com.tonmoy1912.game.RuleSet;
 
 public class RuleEngine {
 

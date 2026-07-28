@@ -1,4 +1,4 @@
-package com.tonmoy1912.game;
+package com.tonmoy1912.boards;
 
 // Interface Segregation Principle
 public interface CellBoard extends Board {

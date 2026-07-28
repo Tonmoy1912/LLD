@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.tonmoy1912.api.AIEngine;
 import com.tonmoy1912.api.GameEngine;
 import com.tonmoy1912.api.RuleEngine;
-import com.tonmoy1912.game.Board;
+import com.tonmoy1912.boards.Board;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Player;

@@ -1,7 +1,7 @@
 package com.tonmoy1912.api;
 
+import com.tonmoy1912.boards.Board;
 import com.tonmoy1912.boards.TicTacToeBoard;
-import com.tonmoy1912.game.Board;
 import com.tonmoy1912.game.Move;
 
 public class GameEngine {

@@ -1,5 +1,7 @@
 package com.tonmoy1912.game;
 
+import com.tonmoy1912.boards.Board;
+
 public class Game {
     private GameConfig gameConfig;
     private Board board;
