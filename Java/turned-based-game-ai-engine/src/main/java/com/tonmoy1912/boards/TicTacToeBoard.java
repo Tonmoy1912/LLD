@@ -1,5 +1,7 @@
 package com.tonmoy1912.boards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -11,6 +13,7 @@ import com.tonmoy1912.game.Move;
 
 public class TicTacToeBoard implements CellBoard {
     private String cells[][] = new String[3][3];
+    private History history = new History();
 
     public static RuleSet getRules() {
         RuleSet ruleSet = new RuleSet();
@@ -62,8 +65,11 @@ public class TicTacToeBoard implements CellBoard {
     }
 
     @Override
-    public void move(Move move) {
-        setCell(move.getCell(), move.getPlayer().symbol());
+    public TicTacToeBoard move(Move move) {
+        history.add(this);
+        TicTacToeBoard board = copy();
+        board.setCell(move.getCell(), move.getPlayer().symbol());
+        return board;
     }
 
     // Prototype Design Pattern
@@ -75,6 +81,7 @@ public class TicTacToeBoard implements CellBoard {
                 boardCopy.cells[i][j] = cells[i][j];
             }
         }
+        boardCopy.history = history;
         return boardCopy;
     }
 
@@ -107,4 +114,28 @@ public class TicTacToeBoard implements CellBoard {
         return result;
     }
 
+}
+
+// MOMENTO Design Pattern
+class History {
+    List<Board> boards = new ArrayList<>();
+
+    public Board getBoardAtMove(int moveIndex) {
+        while (boards.size() - 1 > moveIndex) {
+            boards.removeLast();
+        }
+        return boards.getLast();
+    }
+
+    public Board undo() {
+        if (boards.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        boards.removeLast();
+        return boards.getLast();
+    }
+
+    public void add(Board board) {
+        boards.add(board);
+    }
 }
