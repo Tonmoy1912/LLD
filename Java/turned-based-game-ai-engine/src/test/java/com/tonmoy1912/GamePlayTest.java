@@ -90,14 +90,14 @@ public class GamePlayTest {
         playGame(board, firstPlayMoves, secondPlayerMove);
 
         assertTrue(ruleEngine.getState(board).isOver());
-        assertEquals("0", ruleEngine.getState(board).getWinner());
+        assertEquals("O", ruleEngine.getState(board).getWinner());
     }
 
     private void playGame(Board board, int[][] firstPlayMoves, int[][] secondPlayerMove) {
         int next = 0;
 
         while (!ruleEngine.getState(board).isOver()) {
-            Player computer = new Player("0");
+            Player computer = new Player("O");
             Player opponent = new Player("X");
 
             int row = firstPlayMoves[next][0];

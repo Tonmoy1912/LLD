@@ -2,15 +2,20 @@ package com.tonmoy1912.api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.tonmoy1912.boards.Board;
+import com.tonmoy1912.boards.CellBoard;
 import com.tonmoy1912.boards.TicTacToeBoard;
+import com.tonmoy1912.boards.TicTacToeBoard.Symbol;
 import com.tonmoy1912.game.Cell;
 import com.tonmoy1912.game.GameInfo;
 import com.tonmoy1912.game.GameInfoBuilder;
 import com.tonmoy1912.game.GameState;
 import com.tonmoy1912.game.Move;
 import com.tonmoy1912.game.Player;
+import com.tonmoy1912.placements.DefensivePlacement;
+import com.tonmoy1912.placements.OffensivePlacement;
 
 public class RuleEngine {
 
@@ -38,44 +43,34 @@ public class RuleEngine {
         }
     }
 
-    public GameInfo getInfo(Board board) {
+    public GameInfo getInfo(CellBoard board) {
         if (board instanceof TicTacToeBoard) {
+            TicTacToeBoard ticTacToeBoard = (TicTacToeBoard) board;
             GameState gameState = getState(board);
-            final String[] players = new String[] { "X", "O" };
-            Cell forkCell = null;
-            for (int index = 0; index < 2; index++) {
+            for (Symbol symbol : TicTacToeBoard.Symbol.values()) {
+                Player player = new Player(symbol.marker());
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
-                        Player player = new Player(players[index]);
-                        Board b = board.move(new Move(new Cell(i, j), player));
-
-                        boolean canStillWin = false;
-
-                        for (int k = 0; k < 3; k++) {
-                            for (int l = 0; l < 3; l++) {
-                                forkCell = new Cell(k, l);
-                                Board b1 = b.move(new Move(forkCell, player.flip()));
-
-                                if (getState(b1).getWinner().equals(player.flip().symbol())) {
-                                    canStillWin = true;
-                                    break;
+                        if (ticTacToeBoard.getSymbol(i, j)==null){
+                            TicTacToeBoard b = ticTacToeBoard.move(new Move(new Cell(i, j), player));
+                            // force opponent to make a defensive move
+                            // we still win after the move
+                            DefensivePlacement defensivePlacement=DefensivePlacement.get();
+                            Optional<Cell> defensiveCell= defensivePlacement.place(b, player.flip());
+                            if(defensiveCell.isPresent()){
+                                b=b.move(new Move(defensiveCell.get(), player.flip()));
+                                OffensivePlacement offensivePlacement=OffensivePlacement.get();
+                                Optional<Cell> offensiveCell=offensivePlacement.place(b, player);
+                                if(offensiveCell.isPresent()){
+                                    return new GameInfoBuilder()
+                                        .isOver(gameState.isOver())
+                                        .winner(gameState.getWinner())
+                                        .hasFork(true)
+                                        .forkCell(new Cell(i, j))
+                                        .player(player)
+                                        .build();
                                 }
                             }
-
-                            if (canStillWin) {
-                                break;
-                            }
-                        }
-
-                        if (canStillWin) {
-                            // builder design pattern
-                            return new GameInfoBuilder()
-                                    .isOver(gameState.isOver())
-                                    .winner(gameState.getWinner())
-                                    .hasFork(true)
-                                    .forkCell(forkCell)
-                                    .player(player.flip())
-                                    .build();
                         }
                     }
                 }

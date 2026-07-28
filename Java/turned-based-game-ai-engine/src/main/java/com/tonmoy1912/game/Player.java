@@ -17,7 +17,7 @@ public class Player {
     }
 
     public Player flip() {
-        return new Player(playerSymbol=="0"?"X":"0");
+        return new Player(playerSymbol=="O"?"X":"O");
     }
 
     public int getTimeUsedInMillis() {

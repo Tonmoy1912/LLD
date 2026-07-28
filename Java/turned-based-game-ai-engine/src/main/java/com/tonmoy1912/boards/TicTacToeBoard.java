@@ -115,6 +115,19 @@ public class TicTacToeBoard implements CellBoard {
         return result;
     }
 
+    public static enum Symbol{
+        X("O"),O("O");
+
+        String marker;
+
+        Symbol(String marker){
+            this.marker=marker;
+        }
+
+        public String marker(){
+            return marker;
+        }
+    }
 }
 
 // MOMENTO Design Pattern

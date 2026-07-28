@@ -19,7 +19,7 @@ public class Main {
             Board board = gameEngine.start("TicTacToe");
 
             while (!ruleEngine.getState(board).isOver()) {
-                Player computer = new Player("0");
+                Player computer = new Player("O");
                 Player opponent = new Player("X");
 
                 System.out.println("Make your move");
