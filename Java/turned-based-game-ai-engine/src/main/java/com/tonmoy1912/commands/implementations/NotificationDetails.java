@@ -2,14 +2,11 @@ package com.tonmoy1912.commands.implementations;
 
 import com.tonmoy1912.game.User;
 
-public class SendEmailCommand {
+public class NotificationDetails {
     User receiver;
     String message;
-    String link;
-    String templateId;
-    String template;
 
-    public SendEmailCommand(User receiver, String message) {
+    public NotificationDetails(User receiver, String message){
         this.receiver = receiver;
         this.message = message;
     }
@@ -21,5 +18,4 @@ public class SendEmailCommand {
     public String getMessage() {
         return message;
     }
-
 }
