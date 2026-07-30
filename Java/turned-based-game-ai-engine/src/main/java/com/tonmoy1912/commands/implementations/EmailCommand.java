@@ -14,6 +14,11 @@ public class EmailCommand {
         this.link = event.getLink();
     }
 
+    public EmailCommand(NotificationDetails details, String link) {
+        this.details = details;
+        this.link = link;
+    }
+
     public NotificationDetails getDetails() {
         return details;
     }

@@ -14,6 +14,10 @@ public class SMSCommand {
         this.link = event.getLink();
     }
 
+    public SMSCommand(NotificationDetails details) {
+        this.details = details;
+    }
+
     public NotificationDetails getDetails() {
         return details;
     }
